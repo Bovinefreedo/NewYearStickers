@@ -18,7 +18,7 @@ namespace NewYearStickers.Stickers
 
         public TheStickersCore()
         {
-            parties = dataExtractor.intsInRange(2, 2, 102, 7, "Hold");
+            parties = dataExtractor.intsInRange();
             menu = dataExtractor.getMenuElements();
         }
 

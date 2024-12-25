@@ -24,9 +24,23 @@ for (int i = 2; i <= 40; i++) {
     </svg>";
     svgList.Add(baseString);
 }
-DataExtractor data = new();
 
-//TheStickersCore core = new TheStickersCore();
+
+TheStickersCore core = new TheStickersCore();
+
+for (int i = 0; i < core.parties.GetLength(0); i++) {
+    for (int j = 0; j < core.parties.GetLength(1); j++) {
+        Console.Write(core.parties[i, j]);
+    }
+    Console.WriteLine();
+}
+
+//for (int i = 0; i < core.menu.Length; i++) {
+//    for (int j = 0; j < core.menu[i].Length; j++) { 
+//        Console.Write($"{core.menu[i][j].name} ({i},{j}) : {core.menu[i][j].amount} :: ");
+//    }
+//    Console.WriteLine();
+//}
 
 //core.printAllStickers();
 

@@ -32,12 +32,10 @@ namespace NewYearStickers.Extraction
         }
 
 
-        public int[,] intsInRange(int startRow, int startColumn, int endRow, int endColumn, string sheet)
+        public int[,] intsInRange()
         {
             Excel.Range range = null;
-            int rows = endRow - startRow;
-            int columns = endColumn - startColumn;
-            int[,] values = new int[rows,columns];
+            int[,] values = new int[100,5];
 
             try
             {
@@ -46,18 +44,18 @@ namespace NewYearStickers.Extraction
                 int number = 0;
 
                 workbook = excel.Workbooks.Open(filePath);
-                worksheet = (Worksheet)workbook.Sheets[sheet];
+                worksheet = (Worksheet)workbook.Sheets["Hold"];
 
                 // Get the entire range at once
-                range = worksheet.Range[worksheet.Cells[startRow, startColumn], worksheet.Cells[endRow, endColumn]];
+                range = worksheet.Range[worksheet.Cells[2, 2], worksheet.Cells[101, 7]];
 
                 // Convert the range to an array
                 object[,] rangeArray = range.Value2 as object[,];
 
                 // Extract values from the array
-                for (int i = 1; i <= rows; i++)
+                for (int i = 1; i < rangeArray.GetLength(0); i++)
                 {
-                    for (int j = 1; j < columns; j++) {
+                    for (int j = 1; j < rangeArray.GetLength(1); j++) {
                         string? value = rangeArray[i, j]?.ToString();
                         if (value == null)
                             number = 0;
@@ -99,7 +97,7 @@ namespace NewYearStickers.Extraction
         public MenuElement[][] getMenuElements() {
             MenuElement[][] menu = new MenuElement[5][];
             openWorkbook();
-            worksheet = (Worksheet)workbook.Sheets["Menu"];
+            worksheet = (Worksheet)workbook.Sheets["Retter"];
             
             for (int i = 0; i < 5; i++) {
                 int j = 2;
