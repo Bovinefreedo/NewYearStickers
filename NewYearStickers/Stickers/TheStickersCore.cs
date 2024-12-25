@@ -18,7 +18,7 @@ namespace NewYearStickers.Stickers
 
         public TheStickersCore()
         {
-            parties = dataExtractor.intsInRange(2, 2, 101, 7, "Hold");
+            parties = dataExtractor.intsInRange(2, 2, 102, 7, "Hold");
             menu = dataExtractor.getMenuElements();
         }
 
@@ -46,12 +46,26 @@ namespace NewYearStickers.Stickers
             }
         }
 
+        public void printElement(int dish, int elementNumber) { 
+            List<string> stickerSVG = new List<string>();
+            string dishName = menu[dish][elementNumber].name;
+            for (int i = 1; i < 100; i++) {
+                if (parties[i, dish] == 0)
+                    continue;
+                string amount = (menu[dish][elementNumber].amount * parties[i, dish]).ToString();
+                string people = parties[i,dish].ToString();
+                string Svg = stickerGenerator.makeSVG(i.ToString(), people, dishName, amount);
+                stickerSVG.Add(Svg);
+            }
+            dishName = dishName.Replace(" ", "_");
+            string outPath = $@"C:\Users\hotso\Documents\Stickers\{dishName}.pdf";
+            svgGridPdf.AddSvgGridToPdf(stickerSVG, outPath);
+        }
+
         public void printAllStickers() {
             for (int i = 0; i < 5; i++) {
-                foreach (MenuElement element in menu[i]) {
-                    for (int j = 0; j < parties.GetLength(1); j++) { 
-                    
-                    }
+                for (int j = 0; j < menu[i].Length; j++) {
+                    printElement(i, j);
                 }
             }
         }
