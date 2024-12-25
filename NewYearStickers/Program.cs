@@ -35,6 +35,8 @@ for (int i = 0; i < core.parties.GetLength(0); i++) {
     Console.WriteLine();
 }
 
+core.printAllStickers();
+
 //for (int i = 0; i < core.menu.Length; i++) {
 //    for (int j = 0; j < core.menu[i].Length; j++) { 
 //        Console.Write($"{core.menu[i][j].name} ({i},{j}) : {core.menu[i][j].amount} :: ");
