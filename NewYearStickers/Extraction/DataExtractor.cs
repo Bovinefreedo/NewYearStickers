@@ -128,6 +128,11 @@ namespace NewYearStickers.Extraction
             }
         }
 
+        public int[,] intsInRange(int startRow, int startColumn, int endRow, int endColumn)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<string> getCellsInRow(int row, int startColumn, int endColumn, string sheet)
         {
             Excel.Application excel = null;
