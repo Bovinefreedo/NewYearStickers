@@ -1,20 +1,29 @@
 ﻿
 
-string filePath = "C:/Users/hotso/source/repos/NewYearStickers/NewYearStickers/Extraction/NewYearMenu.xlsx";
-if (!File.Exists(filePath))
+using System.Security.Cryptography.X509Certificates;
+Random random = new Random();
+var svgList = new List<string>
 {
-    throw new FileNotFoundException($"Excel file not found at: {filePath}");
+    @"<svg xmlns=""http://www.w3.org/2000/svg"" width=""51mm"" height=""38mm"" viewBox=""0 0 51 38"">
+        <circle cx=""8"" cy=""8"" r=""6"" fill=""white"" stroke=""black"" stroke-width=""0.5""/>
+        <text x=""8"" y=""9"" font-family=""Arial"" font-size=""5"" text-anchor=""middle"" fill=""black"">1</text>
+        <text x=""25.5"" y=""22"" font-family=""Arial"" font-size=""5"" text-anchor=""middle"" fill=""black"">10 x Bisque</text>
+        <text x=""25.5"" y=""30"" font-family=""Arial"" font-size=""5"" text-anchor=""middle"" fill=""black"">750</text>
+    </svg>",
+};
+
+for (int i = 2; i <= 40; i++) {
+    int person = random.Next(15);
+    int amount = 75 * person;
+    string baseString = @$"<svg xmlns=""http://www.w3.org/2000/svg"" width=""51mm"" height=""38mm"" viewBox=""0 0 51 38"">
+        <circle cx=""8"" cy=""8"" r=""6"" fill=""white"" stroke=""black"" stroke-width=""0.5""/>
+        <text x=""8"" y=""9"" font-family=""Arial"" font-size=""5"" text-anchor=""middle"" fill=""black"">{i}</text>
+        <text x=""25.5"" y=""22"" font-family=""Arial"" font-size=""5"" text-anchor=""middle"" fill=""black"">{person} x Bisque</text>
+        <text x=""25.5"" y=""30"" font-family=""Arial"" font-size=""5"" text-anchor=""middle"" fill=""black"">{amount}</text>
+    </svg>";
+    svgList.Add(baseString);
 }
 
-var extractor = new DataExtractor();
-string cellValue = extractor.getCell(2, 1, "Hold"); // Gets cell A1 from Sheet1
-Console.WriteLine(cellValue);
-
-List<string> columnData = extractor.getCellsInColumn(1, 1, 50, "Hold");
-
-foreach (string cell in columnData) { 
-    Console.WriteLine(cell);
-}
-
-var generator = new StickerGenerator();
-
+//var svgGridPdf = new SvgGridPdf();
+//svgGridPdf.AddSvgGridToPdf(svgList, @"C:\Users\hotso\Documents\Stickers\stickers.pdf");
+//Console.ReadLine();
