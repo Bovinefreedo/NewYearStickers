@@ -24,10 +24,11 @@ for (int i = 2; i <= 40; i++) {
     </svg>";
     svgList.Add(baseString);
 }
- 
-TheStickersCore core = new TheStickersCore();
+DataExtractor data = new DataExtractor();
+MenuElement[][] menu = data.getMenuElements();
+//TheStickersCore core = new TheStickersCore();
 
-foreach (MenuElement[] dish in core.menu) {
+foreach (MenuElement[] dish in menu) {
     foreach (MenuElement element in dish) { 
         Console.WriteLine($"{element.name} for {element.amount}");
     }
