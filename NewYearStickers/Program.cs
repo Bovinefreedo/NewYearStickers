@@ -27,7 +27,7 @@ for (int i = 2; i <= 40; i++) {
 
 TheStickersCore core = new TheStickersCore();
 
-core.printAllStickers();
+core.printParty(2);
 
 //List<string> strings = data.getCellsInColumn(1, 2, 50, "Hold");
 

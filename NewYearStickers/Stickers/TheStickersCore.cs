@@ -49,12 +49,12 @@ namespace NewYearStickers.Stickers
         public void printElement(int dish, int elementNumber) { 
             List<string> stickerSVG = new List<string>();
             string dishName = menu[dish][elementNumber].name;
-            for (int i = 1; i < 100; i++) {
+            for (int i = 0; i < 99; i++) {
                 if (parties[i, dish] == 0)
                     continue;
                 string amount = (menu[dish][elementNumber].amount * parties[i, dish]).ToString();
                 string people = parties[i,dish].ToString();
-                string Svg = stickerGenerator.makeSVG(i.ToString(), people, dishName, amount);
+                string Svg = stickerGenerator.makeSVG((i+1).ToString(), people, dishName, amount);
                 stickerSVG.Add(Svg);
             }
             dishName = dishName.Replace(" ", "_");
@@ -70,5 +70,24 @@ namespace NewYearStickers.Stickers
             }
         }
 
+        public void printParty(int num) {
+            int number = num - 1;
+            List<string> stickerSVG = new List<string>();
+            for (int i = 0; i < 5; i++) {
+                if (parties[number, i] == 0) {
+                    continue;
+                }
+                for(int j = 0; j < menu[i].Length; j++) {
+                    string amount = (parties[number, i] * menu[i][j].amount).ToString();
+                    string people = parties[number,i].ToString();
+                    string dish = menu[i][j].name;
+                    string Svg = stickerGenerator.makeSVG(num.ToString(), people, dish, amount);
+                    stickerSVG.Add(Svg);
+                    Console.WriteLine(menu[i][j].name);
+                }
+            }
+            string outPath = $@"C:\Users\hotso\Documents\Stickers\hold{num}.pdf";
+            svgGridPdf.AddSvgGridToPdf(stickerSVG, outPath);
+        }
     }
 }
