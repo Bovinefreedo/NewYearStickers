@@ -24,10 +24,11 @@ for (int i = 2; i <= 40; i++) {
     </svg>";
     svgList.Add(baseString);
 }
+DataExtractor data = new();
 
-TheStickersCore core = new TheStickersCore();
+//TheStickersCore core = new TheStickersCore();
 
-core.printParty(2);
+//core.printAllStickers();
 
 //List<string> strings = data.getCellsInColumn(1, 2, 50, "Hold");
 

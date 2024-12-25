@@ -14,6 +14,7 @@ namespace NewYearStickers.Extraction
 
         public DataExtractor()
         {
+
             string projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
             this.filePath = Path.Combine(projectDirectory, "Extraction", "NewYearMenu.xlsx");
 
