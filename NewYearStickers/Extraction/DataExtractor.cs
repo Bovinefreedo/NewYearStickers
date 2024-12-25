@@ -11,8 +11,6 @@ public class DataExtractor
         string projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
         this.filePath = Path.Combine(projectDirectory, "Extraction", "NewYearMenu.xlsx");
 
-        Console.WriteLine($"Attempting to access file at: {this.filePath}"); // Debug line
-
         if (!File.Exists(this.filePath))
         {
             throw new FileNotFoundException($"Excel file not found at: {this.filePath}");

@@ -79,12 +79,11 @@ public class PDFGenerator
         try
         {
             // Use the existing StickerGenerator to generate the SVG
-            stickerGenerator.GenerateSpecificSticker(
+            stickerGenerator.makeSVG(
                 sticker.Hold,
                 sticker.People,
                 sticker.Course,
-                sticker.Amount,
-                tempSvgPath
+                sticker.Amount
             );
 
             // Load and render SVG
