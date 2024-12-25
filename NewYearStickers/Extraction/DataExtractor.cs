@@ -6,23 +6,24 @@ namespace NewYearStickers.Extraction
     public class DataExtractor
     {
         private readonly string filePath;
+        private Excel.Application excel = null;
+        private Excel.Workbook workbook = null;
+        private Excel.Worksheet worksheet = null;
+        private Excel.Range range = null;
 
         public DataExtractor()
         {
             string projectDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
             this.filePath = Path.Combine(projectDirectory, "Extraction", "NewYearMenu.xlsx");
 
-        if (!File.Exists(this.filePath))
-        {
-            throw new FileNotFoundException($"Excel file not found at: {this.filePath}");
+            if (!File.Exists(this.filePath))
+            {
+                throw new FileNotFoundException($"Excel file not found at: {this.filePath}");
+            }
         }
-    }
 
         public string getCell(int row, int column, string sheet)
         {
-            Excel.Application excel = null;
-            Excel.Workbook workbook = null;
-            Excel.Worksheet worksheet = null;
             Excel.Range cell = null;
 
             try
@@ -70,9 +71,6 @@ namespace NewYearStickers.Extraction
 
         public List<string> getCellsInColumn(int column, int startRow, int endRow, string sheet)
         {
-            Excel.Application excel = null;
-            Excel.Workbook workbook = null;
-            Excel.Worksheet worksheet = null;
             Excel.Range range = null;
             List<string> values = new List<string>();
 
@@ -126,16 +124,72 @@ namespace NewYearStickers.Extraction
             }
         }
 
-        public int[,] intsInRange(int startRow, int startColumn, int endRow, int endColumn)
+        public int[,] intsInRange(int startRow, int startColumn, int endRow, int endColumn, string sheet)
         {
-            throw new NotImplementedException();
+            Excel.Range range = null;
+            int rows = endRow - startRow;
+            int columns = endColumn - startColumn;
+            int[,] values = new int[rows,columns];
+
+            try
+            {
+                excel = new Excel.Application();
+                excel.Visible = false;
+                int number = 0;
+
+                workbook = excel.Workbooks.Open(filePath);
+                worksheet = (Excel.Worksheet)workbook.Sheets[sheet];
+
+                // Get the entire range at once
+                range = worksheet.Range[worksheet.Cells[startRow, startColumn], worksheet.Cells[endRow, endColumn]];
+
+                // Convert the range to an array
+                object[,] rangeArray = range.Value2 as object[,];
+
+                // Extract values from the array
+                for (int i = 1; i <= rows; i++)
+                {
+                    for (int j = 1; j < columns; j++) {
+                        string? value = rangeArray[i, j]?.ToString();
+                        if (value == null)
+                            number = 0;
+                        else
+                            number = int.Parse(value);
+                        values[i-1, j-1] = number;
+                    }
+                }
+
+                return values;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
+            }
+            finally
+            {
+                // Cleanup in reverse order
+                if (range != null) Marshal.ReleaseComObject(range);
+                if (worksheet != null) Marshal.ReleaseComObject(worksheet);
+                if (workbook != null)
+                {
+                    workbook.Close(false);
+                    Marshal.ReleaseComObject(workbook);
+                }
+                if (excel != null)
+                {
+                    excel.Quit();
+                    Marshal.ReleaseComObject(excel);
+                }
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
         }
 
         public List<string> getCellsInRow(int row, int startColumn, int endColumn, string sheet)
         {
-            Excel.Application excel = null;
-            Excel.Workbook workbook = null;
-            Excel.Worksheet worksheet = null;
             Excel.Range range = null;
             List<string> values = new List<string>();
 
