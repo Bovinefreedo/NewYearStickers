@@ -1,5 +1,6 @@
 ﻿
 using NewYearStickers.Extraction;
+using NewYearStickers.Stickers;
 using System.Security.Cryptography.X509Certificates;
 Random random = new Random();
 var svgList = new List<string>
@@ -24,17 +25,23 @@ for (int i = 2; i <= 40; i++) {
     svgList.Add(baseString);
 }
  
-DataExtractor data = new DataExtractor();
+TheStickersCore core = new TheStickersCore();
 
-List<string> strings = data.getCellsInColumn(1, 2, 50, "Hold");
-
-int[,] ints = data.intsInRange(2, 2, 101, 7, "Hold");
-for (int i = 0; i < ints.GetLength(0); i++) {
-    for (int j = 0; j < ints.GetLength(1); j++) {
-        Console.Write(ints[i, j]);
+foreach (MenuElement[] dish in core.menu) {
+    foreach (MenuElement element in dish) { 
+        Console.WriteLine($"{element.name} for {element.amount}");
     }
-    Console.WriteLine();
 }
+
+//List<string> strings = data.getCellsInColumn(1, 2, 50, "Hold");
+
+//int[,] ints = data.intsInRange(2, 2, 101, 7, "Hold");
+//for (int i = 0; i < ints.GetLength(0); i++) {
+//    for (int j = 0; j < ints.GetLength(1); j++) {
+//        Console.Write(ints[i, j]);
+//    }
+//    Console.WriteLine();
+//}
 
 //var svgGridPdf = new SvgGridPdf();
 //svgGridPdf.AddSvgGridToPdf(svgList, @"C:\Users\hotso\Documents\Stickers\stickers.pdf");
