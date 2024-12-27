@@ -22,17 +22,20 @@ namespace NewYearStickers.Stickers
             menu = dataExtractor.getMenuElements();
         }
 
-        public void chooseOptions() {
+        public void chooseOptions()
+        {
             Console.WriteLine("Vælg en af følgende");
             Console.WriteLine("1: print alle sedler");
             Console.WriteLine("2: print sedler til en ret");
             Console.WriteLine("3: print sedler til et hold");
             int response = -1;
             bool isInt = int.TryParse(Console.ReadLine(), out response);
-            if (isInt) { 
+            if (isInt)
+            {
                 chooseOptions();
             }
-            switch (response) {
+            switch (response)
+            {
                 case 1:
                     printAllStickers();
                     break;
@@ -46,15 +49,17 @@ namespace NewYearStickers.Stickers
             }
         }
 
-        public void printElement(int dish, int elementNumber) { 
+        public void printElement(int dish, int elementNumber)
+        {
             List<string> stickerSVG = new List<string>();
             string dishName = menu[dish][elementNumber].name;
-            for (int i = 0; i < 99; i++) {
+            for (int i = 0; i < 99; i++)
+            {
                 if (parties[i, dish] == 0)
                     continue;
                 string amount = (menu[dish][elementNumber].amount * parties[i, dish]).ToString();
-                string people = parties[i,dish].ToString();
-                string Svg = stickerGenerator.makeSVG((i+1).ToString(), people, dishName, amount);
+                string people = parties[i, dish].ToString();
+                string Svg = stickerGenerator.makeSVG((i + 1).ToString(), people, dishName, amount);
                 stickerSVG.Add(Svg);
             }
             dishName = dishName.Replace(" ", "_");
@@ -62,32 +67,61 @@ namespace NewYearStickers.Stickers
             svgGridPdf.AddSvgGridToPdf(stickerSVG, outPath);
         }
 
-        public void printAllStickers() {
-            for (int i = 0; i < 5; i++) {
-                for (int j = 0; j < menu[i].Length; j++) {
+        public void printAllStickers()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < menu[i].Length; j++)
+                {
                     printElement(i, j);
                 }
             }
         }
 
-        public void printParty(int num) {
+        public void printParty(int num)
+        {
             int number = num - 1;
+            var paramsList = new List<(string hold, string people, string dish, string amount)>();
             List<string> stickerSVG = new List<string>();
-            for (int i = 0; i < 5; i++) {
-                if (parties[number, i] == 0) {
+            for (int i = 0; i < menu.Length; i++)
+            {
+                if (parties[number, i] == 0)
+                {
                     continue;
                 }
-                for(int j = 0; j < menu[i].Length; j++) {
+                for (int j = 0; j < menu[i].Length; j++)
+                {
                     string amount = (parties[number, i] * menu[i][j].amount).ToString();
-                    string people = parties[number,i].ToString();
+                    string people = parties[number, i].ToString();
                     string dish = menu[i][j].name;
-                    string Svg = stickerGenerator.makeSVG(num.ToString(), people, dish, amount);
-                    stickerSVG.Add(Svg);
-                    Console.WriteLine(menu[i][j].name);
+                    string hold = num.ToString();
+                    Console.WriteLine($"{hold} :: {people} x {dish} :: {amount}");
+                    paramsList.Add((hold, people, dish, amount));
                 }
             }
+            foreach (var param in paramsList)
+            {
+                string svg = stickerGenerator.makeSVG(
+                    param.hold,
+                    param.people,
+                    param.dish,
+                    param.amount
+                );
+                stickerSVG.Add(svg);
+            }
+            foreach (string sticker in stickerSVG) { 
+                Console.WriteLine(sticker);
+            }
+            var stickerSVGCopy = new List<string>(stickerSVG);
+
             string outPath = $@"C:\Users\hotso\Documents\Stickers\hold{num}.pdf";
-            svgGridPdf.AddSvgGridToPdf(stickerSVG, outPath);
+            // Write SVGs to a text file for verification
+            File.WriteAllLines($@"C:\Users\hotso\Documents\Stickers\hold{num}_before.txt", stickerSVG);
+
+            svgGridPdf.AddSvgGridToPdf(stickerSVGCopy, outPath);
+
+            // Write the copy after the call to check if anything changed
+            File.WriteAllLines($@"C:\Users\hotso\Documents\Stickers\hold{num}_after.txt", stickerSVGCopy);
         }
     }
 }
