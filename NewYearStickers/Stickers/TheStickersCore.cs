@@ -115,13 +115,8 @@ namespace NewYearStickers.Stickers
             var stickerSVGCopy = new List<string>(stickerSVG);
 
             string outPath = $@"C:\Users\hotso\Documents\Stickers\hold{num}.pdf";
-            // Write SVGs to a text file for verification
-            File.WriteAllLines($@"C:\Users\hotso\Documents\Stickers\hold{num}_before.txt", stickerSVG);
 
             svgGridPdf.AddSvgGridToPdf(stickerSVGCopy, outPath);
-
-            // Write the copy after the call to check if anything changed
-            File.WriteAllLines($@"C:\Users\hotso\Documents\Stickers\hold{num}_after.txt", stickerSVGCopy);
         }
     }
 }

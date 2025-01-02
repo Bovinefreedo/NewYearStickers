@@ -29,14 +29,15 @@ public class SvgGridPdf
             // Loop through the SVGs and render them in the grid
             for (int i = 0; i < svgList.Count; i++)
             {
-                if (i % 40 == 0 && i>0)
+                Console.WriteLine(svgList[i]);
+                if (i % 40 == 0 && i > 0)
                 {
                     page = document.AddPage();
                     gfx = XGraphics.FromPdfPage(page);
                 }
                 // Calculate grid position
-                int row = (i%40) / columns;
-                int column = (i%40) % columns;
+                int row = (i % 40) / columns;
+                int column = (i % 40) % columns;
 
                 // Calculate top-left corner of the cell
                 double x = column * cellWidth;
@@ -44,17 +45,19 @@ public class SvgGridPdf
 
                 // Parse the SVG and render as an image
                 var svgDocument = SvgDocument.FromSvg<SvgDocument>(svgList[i]);
-                var bitmap = svgDocument.Draw();
+                using (var bitmap = svgDocument.Draw())
                 {
                     // Convert the image to a memory stream
                     using (var memoryStream = new MemoryStream())
                     {
                         bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
                         memoryStream.Position = 0;
-                        XImage xImage = XImage.FromStream(memoryStream);
+                        using (XImage xImage = XImage.FromStream(memoryStream))
+                        {
 
-                        // Scale the image to fit within the cell
-                        gfx.DrawImage(xImage, x, y, cellWidth, cellHeight);
+                            // Scale the image to fit within the cell
+                            gfx.DrawImage(xImage, x, y, cellWidth, cellHeight);
+                        }
                     }
                 }
             }
